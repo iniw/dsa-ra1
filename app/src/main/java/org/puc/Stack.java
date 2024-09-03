@@ -37,13 +37,7 @@ class Stack {
     }
 
     public void print() {
-        if (top == null)
-            return;
-
-        var node = top;
-        for (; node.next != null; node = node.next)
+        for (var node = top; node != null; node = node.next)
             System.out.printf("id = %d, desc = %s\n", node.id(), node.desc());
-        System.out.printf("id = %d, desc = %s\n", node.id(), node.desc());
-
     }
 }

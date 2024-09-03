@@ -5,7 +5,18 @@ package org.puc;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        System.out.println("\n\n~ Stack ~");
+        testStack();
+
+        System.out.println("\n\n~ Queue ~");
+        testQueue();
+
+    }
+
+    private static void testStack() throws Exception {
         var stack = new Stack();
+
+        System.out.println("\n> Push 3");
 
         stack.push(new Node(1, "asd"));
         stack.push(new Node(2, "asd"));
@@ -13,26 +24,64 @@ public class App {
 
         stack.print();
 
-        System.out.println("-----------------");
+        System.out.println("\n> Pop 2");
 
         stack.pop();
         stack.pop();
 
         stack.print();
 
-        System.out.println("-----------------");
+        System.out.println("\n> Push 1");
 
         stack.push(new Node(4, "asd"));
 
         stack.print();
 
-        System.out.println("-----------------");
+        System.out.println("\n> Pop 2");
 
         stack.pop();
         stack.pop();
 
+        System.out.println("\n> Pop 1 (error)");
         try {
             stack.pop();
+        } catch (Exception e) {
+            System.out.printf("Opa! Erro! \"%s\"", e.getMessage());
+        }
+    }
+
+    private static void testQueue() throws Exception {
+        var queue = new Queue();
+
+        System.out.println("\n> Push 3");
+
+        queue.push(new Node(1, "asd"));
+        queue.push(new Node(2, "asd"));
+        queue.push(new Node(3, "asd"));
+
+        queue.print();
+
+        System.out.println("\n> Pop 2");
+
+        queue.pop();
+        queue.pop();
+
+        queue.print();
+
+        System.out.println("\n> Push 1");
+
+        queue.push(new Node(4, "asd"));
+
+        queue.print();
+
+        System.out.println("\n> Pop 2");
+
+        queue.pop();
+        queue.pop();
+
+        System.out.println("\n> Pop 1 (error)");
+        try {
+            queue.pop();
         } catch (Exception e) {
             System.out.printf("Opa! Erro! \"%s\"", e.getMessage());
         }
