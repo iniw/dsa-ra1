@@ -4,7 +4,37 @@
 package org.puc;
 
 public class App {
-    public static void main(String[] args) {
-        System.out.println("oi");
+    public static void main(String[] args) throws Exception {
+        var stack = new Stack();
+
+        stack.push(new Node(1, "asd"));
+        stack.push(new Node(2, "asd"));
+        stack.push(new Node(3, "asd"));
+
+        stack.print();
+
+        System.out.println("-----------------");
+
+        stack.pop();
+        stack.pop();
+
+        stack.print();
+
+        System.out.println("-----------------");
+
+        stack.push(new Node(4, "asd"));
+
+        stack.print();
+
+        System.out.println("-----------------");
+
+        stack.pop();
+        stack.pop();
+
+        try {
+            stack.pop();
+        } catch (Exception e) {
+            System.out.printf("Opa! Erro! \"%s\"", e.getMessage());
+        }
     }
 }
