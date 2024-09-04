@@ -3,16 +3,15 @@ package org.puc;
 import java.time.LocalDateTime;
 
 class Node {
-    int id;
-    String desc;
-    LocalDateTime timestamp;
+    private int id;
+    private String desc;
+    private LocalDateTime timestamp;
     Node next;
 
     Node(int id, String desc) {
         this.id = id;
         this.desc = desc;
 
-        this.next = null;
         this.timestamp = LocalDateTime.now();
     }
 
@@ -22,5 +21,9 @@ class Node {
 
     public String desc() {
         return this.desc;
+    }
+
+    public LocalDateTime timestamp() {
+        return timestamp;
     }
 }
