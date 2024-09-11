@@ -1,10 +1,15 @@
 package org.puc;
 
 public class Queue {
-    private Node head;
-    private Node tail;
+    private Element head;
+    private Element tail;
 
-    void push(Node item) {
+    public Queue(Element... elements) throws Exception {
+        for (var element : elements)
+            this.push(element);
+    }
+
+    void push(Element item) {
         if (head == null) {
             tail = head = item;
         } else {
@@ -12,17 +17,17 @@ public class Queue {
         }
     }
 
-    Node pop() throws Exception {
+    Element pop() throws Exception {
         if (head == null)
             throw new Exception("Cannot pop an empty queue.");
 
-        Node last = head.next;
+        var last = head;
         head = head.next;
         return last;
     }
 
     public void print() {
         for (var node = head; node != null; node = node.next)
-            System.out.printf("id = %d, desc = %s\n", node.id(), node.desc());
+            System.out.printf("%s | %s | %s\n", node.id(), node.description(), node.extra());
     }
 }

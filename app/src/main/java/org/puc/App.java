@@ -3,87 +3,168 @@
  */
 package org.puc;
 
+import java.util.Date;
+import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+
 public class App {
+    enum Menu {
+        Main,
+        Request,
+        Service,
+    };
+
     public static void main(String[] args) throws Exception {
-        System.out.println("\n\n~ Stack ~");
-        testStack();
+        var requestStack = new Stack(
+                new Element("REQ001", "Instalação de software", "2024-08-20 10:30"),
+                new Element("REQ002", "Manutenção preventiva", "2024-08-20 11:00"),
+                new Element("REQ003", "Atualização de sistema", "2024-08-20 11:30"),
+                new Element("REQ004", "Suporte técnico", "2024-08-20 12:00"),
+                new Element("REQ005", "Troca de equipamento", "2024-08-20 12:30"),
+                new Element("REQ006", "Consulta de garantia", "2024-08-20 13:00"),
+                new Element("REQ007", "Reparo de impressora", "2024-08-20 13:30"),
+                new Element("REQ008", "Configuração de rede", "2024-08-20 14:00"),
+                new Element("REQ009", "Restauração de dados", "2024-08-20 14:30"),
+                new Element("REQ010", "Consulta técnica", "2024-08-20 15:00"));
+        var currentRequestId = 10;
 
-        System.out.println("\n\n~ Queue ~");
-        testQueue();
+        var serviceQueue = new Queue(
+                new Element("CLI001", "Maria Silva", "Dúvida sobre produto"),
+                new Element("CLI002", "João Souza", "Reclamação de serviço"),
+                new Element("CLI003", "Ana Costa", "Solicitação de reembolso"),
+                new Element("CLI004", "Pedro Alves", "Informações de entrega"),
+                new Element("CLI005", "Carla Dias", "Agendamento de visita"),
+                new Element("CLI006", "Lucas Martins", "Alteração de pedido"),
+                new Element("CLI007", "Patrícia Rocha", "Cancelamento de contrato"),
+                new Element("CLI008", "Rafael Lima", "Renovação de assinatura"),
+                new Element("CLI009", "Fernanda Gomes", "Suporte para instalação"),
+                new Element("CLI010", "Carlos Eduardo", "Pedido de orçamento"));
+        var currentServiceId = 10;
 
-    }
+        var shouldQuit = false;
+        var activeMenu = Menu.Main;
+        var inputScanner = new Scanner(System.in);
 
-    private static void testStack() throws Exception {
-        var stack = new Stack();
+        while (!shouldQuit) {
+            String menuString = null;
+            switch (activeMenu) {
+                case Menu.Main:
+                    menuString = """
+                            > 1 - Gerenciar solicitações
+                            > 2 - Gerenciar atendimentos
+                            > 3 - Sair""";
+                    break;
+                case Menu.Request:
+                    menuString = """
+                            > 1 - Consultar solicitações
+                            > 2 - Criar nova solicitação
+                            > 3 - Finalizar solicitação mais recente
+                            > 4 - Voltar""";
+                    break;
+                case Menu.Service:
+                    menuString = """
+                            > 1 - Consultar atendimentos
+                            > 2 - Criar novo atendimento
+                            > 3 - Finalizar atendimento mais antigo
+                            > 4 - Voltar""";
+                    break;
+            }
 
-        System.out.println("\n> Push 3");
+            System.out.println("\nEscolha uma função:");
+            System.out.println(menuString);
+            System.out.print("\n> ");
 
-        stack.push(new Node(1, "asd"));
-        stack.push(new Node(2, "asd"));
-        stack.push(new Node(3, "asd"));
+            var inputLine = inputScanner.nextLine();
+            switch (activeMenu) {
+                case Menu.Main:
+                    switch (inputLine) {
+                        case "1":
+                            activeMenu = Menu.Request;
+                            break;
+                        case "2":
+                            activeMenu = Menu.Service;
+                            break;
+                        case "3":
+                            shouldQuit = true;
+                            break;
+                        default:
+                            System.out.println("Função inválida.");
+                            break;
+                    }
+                    break;
+                case Menu.Request:
+                    switch (inputLine) {
+                        case "1":
+                            requestStack.print();
+                            break;
+                        case "2":
+                            System.out.println("Descreva o novo solicitação (digite \"voltar\" para voltar):");
+                            System.out.print("Descrição: ");
+                            var description = inputScanner.nextLine();
+                            if (description.equalsIgnoreCase("voltar"))
+                                continue;
 
-        stack.print();
+                            currentRequestId += 1;
+                            var requestId = String.format("REQ%03d", currentRequestId);
+                            var timestamp = new SimpleDateFormat("YYYY-MM-dd HH:mm").format(new Date());
 
-        System.out.println("\n> Pop 2");
+                            requestStack.push(new Element(requestId, description, timestamp));
 
-        stack.pop();
-        stack.pop();
+                            System.out.printf("Criado solicitação com ID \"%s\"\n", requestId);
+                            break;
+                        case "3":
+                            var last = requestStack.pop();
+                            System.out.printf("Solicitação \"%s\" foi finalizada.\n", last.id());
+                            break;
+                        case "4":
+                            activeMenu = Menu.Main;
+                            break;
+                        default:
+                            System.out.println("Função inválida.");
+                            break;
+                    }
+                    break;
+                case Menu.Service:
+                    switch (inputLine) {
+                        case "1":
+                            serviceQueue.print();
+                            break;
+                        case "2":
+                            System.out.println("Descreva o novo atendimento (digite \"voltar\" para voltar):");
 
-        stack.print();
+                            System.out.print("Nome do cliente: ");
+                            var name = inputScanner.nextLine();
+                            if (name.equalsIgnoreCase("voltar"))
+                                continue;
 
-        System.out.println("\n> Push 1");
+                            System.out.print("Descrição do atendimento: ");
+                            var description = inputScanner.nextLine();
+                            if (description.equalsIgnoreCase("voltar"))
+                                continue;
 
-        stack.push(new Node(4, "asd"));
+                            currentServiceId += 1;
+                            var requestId = String.format("CLI%03d", currentServiceId);
 
-        stack.print();
+                            serviceQueue.push(new Element(requestId, name, description));
 
-        System.out.println("\n> Pop 2");
-
-        stack.pop();
-        stack.pop();
-
-        System.out.println("\n> Pop 1 (error)");
-        try {
-            stack.pop();
-        } catch (Exception e) {
-            System.out.printf("Opa! Erro! \"%s\"", e.getMessage());
+                            System.out.printf("Criado atendimento com ID \"%s\"\n", requestId);
+                            break;
+                        case "3":
+                            var last = serviceQueue.pop();
+                            System.out.printf("Atendimento \"%s\" foi finalizado.\n", last.id());
+                            break;
+                        case "4":
+                            activeMenu = Menu.Main;
+                            break;
+                        default:
+                            System.out.println("Função inválida.");
+                            break;
+                    }
+                    break;
+            }
         }
-    }
 
-    private static void testQueue() throws Exception {
-        var queue = new Queue();
-
-        System.out.println("\n> Push 3");
-
-        queue.push(new Node(1, "asd"));
-        queue.push(new Node(2, "asd"));
-        queue.push(new Node(3, "asd"));
-
-        queue.print();
-
-        System.out.println("\n> Pop 2");
-
-        queue.pop();
-        queue.pop();
-
-        queue.print();
-
-        System.out.println("\n> Push 1");
-
-        queue.push(new Node(4, "asd"));
-
-        queue.print();
-
-        System.out.println("\n> Pop 2");
-
-        queue.pop();
-        queue.pop();
-
-        System.out.println("\n> Pop 1 (error)");
-        try {
-            queue.pop();
-        } catch (Exception e) {
-            System.out.printf("Opa! Erro! \"%s\"", e.getMessage());
-        }
+        inputScanner.close();
     }
 }

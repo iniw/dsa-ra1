@@ -1,9 +1,14 @@
 package org.puc;
 
 class Stack {
-    private Node top;
+    private Element top;
 
-    public void push(Node item) throws Exception {
+    public Stack(Element... elements) throws Exception {
+        for (var element : elements)
+            this.push(element);
+    }
+
+    public void push(Element item) throws Exception {
         if (top == null) {
             top = item;
         } else {
@@ -18,7 +23,7 @@ class Stack {
         return top == null;
     }
 
-    public Node pop() throws Exception {
+    public Element pop() throws Exception {
         if (top == null) {
             throw new Exception("Cannot pop an empty stack.");
         } else if (top.next == null) {
@@ -26,8 +31,8 @@ class Stack {
             top = null;
             return last;
         } else {
-            Node next_to_last = null;
-            Node last = top;
+            Element next_to_last = null;
+            Element last = top;
             for (; last.next != null; last = last.next)
                 next_to_last = last;
 
@@ -38,6 +43,6 @@ class Stack {
 
     public void print() {
         for (var node = top; node != null; node = node.next)
-            System.out.printf("id = %d, desc = %s\n", node.id(), node.desc());
+            System.out.printf("%s | %s | %s\n", node.id(), node.description(), node.extra());
     }
 }
