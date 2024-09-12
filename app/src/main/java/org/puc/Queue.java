@@ -4,7 +4,7 @@ public class Queue {
     private Element head;
     private Element tail;
 
-    public Queue(Element... elements) throws Exception {
+    public Queue(Element... elements) {
         for (var element : elements)
             this.push(element);
     }
@@ -24,6 +24,10 @@ public class Queue {
         var last = head;
         head = head.next;
         return last;
+    }
+
+    public boolean is_empty() {
+        return head == null;
     }
 
     public void print() {

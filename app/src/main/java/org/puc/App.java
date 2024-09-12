@@ -6,9 +6,34 @@ package org.puc;
 import java.util.Date;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 
 public class App {
+    static Stack requestStack = new Stack(
+            new Element("REQ001", "Instalação de software", "2024-08-20 10:30"),
+            new Element("REQ002", "Manutenção preventiva", "2024-08-20 11:00"),
+            new Element("REQ003", "Atualização de sistema", "2024-08-20 11:30"),
+            new Element("REQ004", "Suporte técnico", "2024-08-20 12:00"),
+            new Element("REQ005", "Troca de equipamento", "2024-08-20 12:30"),
+            new Element("REQ006", "Consulta de garantia", "2024-08-20 13:00"),
+            new Element("REQ007", "Reparo de impressora", "2024-08-20 13:30"),
+            new Element("REQ008", "Configuração de rede", "2024-08-20 14:00"),
+            new Element("REQ009", "Restauração de dados", "2024-08-20 14:30"),
+            new Element("REQ010", "Consulta técnica", "2024-08-20 15:00"));
+    static int currentRequestId = 10;
+
+    static Queue serviceQueue = new Queue(
+            new Element("CLI001", "Maria Silva", "Dúvida sobre produto"),
+            new Element("CLI002", "João Souza", "Reclamação de serviço"),
+            new Element("CLI003", "Ana Costa", "Solicitação de reembolso"),
+            new Element("CLI004", "Pedro Alves", "Informações de entrega"),
+            new Element("CLI005", "Carla Dias", "Agendamento de visita"),
+            new Element("CLI006", "Lucas Martins", "Alteração de pedido"),
+            new Element("CLI007", "Patrícia Rocha", "Cancelamento de contrato"),
+            new Element("CLI008", "Rafael Lima", "Renovação de assinatura"),
+            new Element("CLI009", "Fernanda Gomes", "Suporte para instalação"),
+            new Element("CLI010", "Carlos Eduardo", "Pedido de orçamento"));
+    static int currentServiceId = 10;
+
     enum Menu {
         Main,
         Request,
@@ -16,32 +41,6 @@ public class App {
     };
 
     public static void main(String[] args) throws Exception {
-        var requestStack = new Stack(
-                new Element("REQ001", "Instalação de software", "2024-08-20 10:30"),
-                new Element("REQ002", "Manutenção preventiva", "2024-08-20 11:00"),
-                new Element("REQ003", "Atualização de sistema", "2024-08-20 11:30"),
-                new Element("REQ004", "Suporte técnico", "2024-08-20 12:00"),
-                new Element("REQ005", "Troca de equipamento", "2024-08-20 12:30"),
-                new Element("REQ006", "Consulta de garantia", "2024-08-20 13:00"),
-                new Element("REQ007", "Reparo de impressora", "2024-08-20 13:30"),
-                new Element("REQ008", "Configuração de rede", "2024-08-20 14:00"),
-                new Element("REQ009", "Restauração de dados", "2024-08-20 14:30"),
-                new Element("REQ010", "Consulta técnica", "2024-08-20 15:00"));
-        var currentRequestId = 10;
-
-        var serviceQueue = new Queue(
-                new Element("CLI001", "Maria Silva", "Dúvida sobre produto"),
-                new Element("CLI002", "João Souza", "Reclamação de serviço"),
-                new Element("CLI003", "Ana Costa", "Solicitação de reembolso"),
-                new Element("CLI004", "Pedro Alves", "Informações de entrega"),
-                new Element("CLI005", "Carla Dias", "Agendamento de visita"),
-                new Element("CLI006", "Lucas Martins", "Alteração de pedido"),
-                new Element("CLI007", "Patrícia Rocha", "Cancelamento de contrato"),
-                new Element("CLI008", "Rafael Lima", "Renovação de assinatura"),
-                new Element("CLI009", "Fernanda Gomes", "Suporte para instalação"),
-                new Element("CLI010", "Carlos Eduardo", "Pedido de orçamento"));
-        var currentServiceId = 10;
-
         var shouldQuit = false;
         var activeMenu = Menu.Main;
         var inputScanner = new Scanner(System.in);
@@ -96,6 +95,11 @@ public class App {
                 case Menu.Request:
                     switch (inputLine) {
                         case "1":
+                            if (requestStack.is_empty()) {
+                                System.out.println("Pilha de solicitações está vazia.");
+                                continue;
+                            }
+
                             requestStack.print();
                             break;
                         case "2":
@@ -114,6 +118,11 @@ public class App {
                             System.out.printf("Criado solicitação com ID \"%s\"\n", requestId);
                             break;
                         case "3":
+                            if (requestStack.is_empty()) {
+                                System.out.println("Não há solicitações para finalizar.");
+                                continue;
+                            }
+
                             var last = requestStack.pop();
                             System.out.printf("Solicitação \"%s\" foi finalizada.\n", last.id());
                             break;
@@ -128,6 +137,11 @@ public class App {
                 case Menu.Service:
                     switch (inputLine) {
                         case "1":
+                            if (serviceQueue.is_empty()) {
+                                System.out.println("Fila de atendimentos está vazia.");
+                                continue;
+                            }
+
                             serviceQueue.print();
                             break;
                         case "2":
@@ -151,6 +165,11 @@ public class App {
                             System.out.printf("Criado atendimento com ID \"%s\"\n", requestId);
                             break;
                         case "3":
+                            if (serviceQueue.is_empty()) {
+                                System.out.println("Não há atendimentos para finalizar.");
+                                continue;
+                            }
+
                             var last = serviceQueue.pop();
                             System.out.printf("Atendimento \"%s\" foi finalizado.\n", last.id());
                             break;

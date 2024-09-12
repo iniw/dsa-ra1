@@ -3,12 +3,12 @@ package org.puc;
 class Stack {
     private Element top;
 
-    public Stack(Element... elements) throws Exception {
+    public Stack(Element... elements) {
         for (var element : elements)
             this.push(element);
     }
 
-    public void push(Element item) throws Exception {
+    public void push(Element item) {
         if (top == null) {
             top = item;
         } else {
